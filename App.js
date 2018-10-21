@@ -1,29 +1,36 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import axios from 'axios';
 import Header from './src/components/Header';
+import ContactList from './src/components/ContactList';
 export default class App extends React.Component {
-  list() {
-    let listOfNames = [];
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      contacts: []
+    };
+  }
+
+  componentDidMount() {
     axios
       .get('https://randomuser.me/api/?nat=br&results=5')
       .then(res => {
         const { results } = res.data;
-        listOfNames = results.map(people => people.name.first);
-        console.log(listOfNames);
+        this.setState({
+          contacts: results
+        });
       })
       .catch(err => {
         console.log(err);
       });
-
-    return listOfNames;
   }
 
   render() {
     return (
       <View>
         <Header title="Contatos" />
-        {this.list()}
+        <ContactList contacts={this.state.contacts} />
       </View>
     );
   }
