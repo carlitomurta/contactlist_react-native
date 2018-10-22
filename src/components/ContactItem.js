@@ -1,12 +1,23 @@
 import React from 'react';
-
+import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
+import { capitalize } from '../util';
 const ContactItem = props => {
-  const { person } = props;
-  const { first, last } = person.name;
+  const { person, openDetail } = props;
+  const { title, first, last } = person.name;
+  const { thumbnail } = person.picture;
   return (
-    <View style={styles.line}>
-      <Text style={styles.lineText}>{`${first} ${last}`}</Text>
-    </View>
+    <TouchableOpacity
+      onPress={() => {
+        openDetail({ person });
+      }}
+    >
+      <View style={styles.line}>
+        <Image style={styles.avatar} source={{ uri: thumbnail }} />
+        <Text style={styles.lineText}>{`${capitalize(title)} ${capitalize(
+          first
+        )} ${capitalize(last)}`}</Text>
+      </View>
+    </TouchableOpacity>
   );
 };
 
@@ -20,7 +31,14 @@ const styles = StyleSheet.create({
   },
   lineText: {
     fontSize: 20,
-    paddingLeft: 15
+    paddingLeft: 15,
+    flex: 7
+  },
+  avatar: {
+    aspectRatio: 1,
+    borderRadius: 50,
+    flex: 1,
+    marginLeft: 15
   }
 });
 export default ContactItem;
